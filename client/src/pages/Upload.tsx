@@ -22,6 +22,7 @@ import {
   hasRestrictedBrands,
   getAllowedBrands,
   isBrandAllowed,
+  getBrandsForAircraft,
   type Manufacturer,
 } from "../../../shared/aircraft";
 import { storagePut } from "../../../server/storage";
@@ -178,9 +179,7 @@ export default function Upload() {
   };
 
   const availableAircraft = manufacturer ? AIRCRAFT_BY_MANUFACTURER[manufacturer] : [];
-  const availableBrands = aircraft && hasRestrictedBrands(aircraft)
-    ? getAllowedBrands(aircraft)
-    : COMMON_BRANDS;
+  const availableBrands = aircraft ? getBrandsForAircraft(aircraft) : COMMON_BRANDS;
 
   if (authLoading) {
     return (
@@ -226,8 +225,8 @@ export default function Upload() {
           <Alert className="mb-6">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              <strong>업로드 전 확인사항:</strong> Boeing은 현대 민항 기체만 허용(B707, B720, B727 제외)됩니다.
-              Airbus A340, A350은 iniBuilds 브랜드만 지원됩니다.
+              <strong>업로드 전 확인사항:</strong> 기종별로 지원하는 브랜드가 다릅니다. 기종을 선택하면 해당 브랜드만 표시됩니다.
+              정확한 기종(예: A330-300, A340-600, B747-400)을 선택해주세요.
             </AlertDescription>
           </Alert>
 
@@ -309,7 +308,12 @@ export default function Upload() {
                   )}
                   {aircraft && hasRestrictedBrands(aircraft) && (
                     <p className="text-sm text-amber-600">
-                      ⚠️ {aircraft} 기종은 iniBuilds 브랜드만 허용됩니다.
+                      ⚠️ {aircraft} 기종은 iniBuilds 브랜드만 지원됩니다.
+                    </p>
+                  )}
+                  {aircraft && !hasRestrictedBrands(aircraft) && (
+                    <p className="text-sm text-blue-600">
+                      ℹ️ {aircraft} 기종에서 지원하는 브랜드만 표시됩니다.
                     </p>
                   )}
                 </div>

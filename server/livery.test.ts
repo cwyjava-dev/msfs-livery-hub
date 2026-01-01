@@ -30,39 +30,39 @@ function createAuthContext(): { ctx: TrpcContext } {
 }
 
 describe("livery.create", () => {
-  it("should reject A340 with non-iniBuilds brand", async () => {
+  it("should reject A340-300 with non-iniBuilds brand", async () => {
     const { ctx } = createAuthContext();
     const caller = appRouter.createCaller(ctx);
 
     await expect(
       caller.livery.create({
         manufacturer: "Airbus",
-        aircraft: "A340",
+        aircraft: "A340-300",
         brand: "FBW",
         liveryName: "Test Livery",
         fileUrl: "https://example.com/file.zip",
         fileKey: "test-key",
       })
-    ).rejects.toThrow("A340 기종은 iniBuilds 브랜드만 허용됩니다.");
+    ).rejects.toThrow("A340-300 기종은 iniBuilds 브랜드만 허용됩니다.");
   });
 
-  it("should reject A350 with non-iniBuilds brand", async () => {
+  it("should reject A350-900 with non-iniBuilds brand", async () => {
     const { ctx } = createAuthContext();
     const caller = appRouter.createCaller(ctx);
 
     await expect(
       caller.livery.create({
         manufacturer: "Airbus",
-        aircraft: "A350",
+        aircraft: "A350-900",
         brand: "Fenix",
         liveryName: "Test Livery",
         fileUrl: "https://example.com/file.zip",
         fileKey: "test-key",
       })
-    ).rejects.toThrow("A350 기종은 iniBuilds 브랜드만 허용됩니다.");
+    ).rejects.toThrow("A350-900 기종은 iniBuilds 브랜드만 허용됩니다.");
   });
 
-  it("should accept A340 with iniBuilds brand", async () => {
+  it("should accept A340-300 with iniBuilds brand", async () => {
     const { ctx } = createAuthContext();
     const caller = appRouter.createCaller(ctx);
 
@@ -71,7 +71,7 @@ describe("livery.create", () => {
     try {
       const result = await caller.livery.create({
         manufacturer: "Airbus",
-        aircraft: "A340",
+        aircraft: "A340-300",
         brand: "iniBuilds",
         liveryName: "Test A340 Livery",
         fileUrl: "https://example.com/file.zip",
@@ -90,15 +90,15 @@ describe("livery.create", () => {
     }
   });
 
-  it("should accept other aircraft with any brand", async () => {
+  it("should accept A330-300 with allowed brands", async () => {
     const { ctx } = createAuthContext();
     const caller = appRouter.createCaller(ctx);
 
     try {
       const result = await caller.livery.create({
         manufacturer: "Airbus",
-        aircraft: "A320",
-        brand: "FBW",
+        aircraft: "A330-300",
+        brand: "iniBuilds",
         liveryName: "Test A320 Livery",
         fileUrl: "https://example.com/file.zip",
         fileKey: "test-key",
