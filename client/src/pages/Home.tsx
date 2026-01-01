@@ -50,7 +50,7 @@ export default function Home() {
             <Plane className="h-24 w-24 text-white drop-shadow-lg" />
           </div>
           <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg leading-tight">
-            Flight Livery Hub.kr
+            Flight Livery Hub
           </h1>
           <p className="text-2xl md:text-3xl text-white mb-12 max-w-3xl mx-auto drop-shadow-lg font-light">
             Microsoft Flight Simulator 리버리를 공유하고 다운로드하는 커뮤니티 플랫폼
