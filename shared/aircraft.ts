@@ -41,18 +41,19 @@ export const AIRCRAFT_BY_MANUFACTURER: Record<Manufacturer, readonly string[]> =
 
 // Brands/Addons
 export const COMMON_BRANDS = [
+  "Asobo",
+  "Bredok3D",
+  "Captain Sim",
   "FBW",
   "Fenix",
-  "Headwind",
-  "LatinVFR",
   "FlyByWire",
-  "Bredok3D",
-  "PMDG",
-  "iFly",
+  "Headwind",
   "Horizon",
-  "Captain Sim",
+  "iFly",
   "iniBuilds",
-  "Asobo",
+  "LatinVFR",
+  "PMDG",
+  "RHDSimulations",
   "기타 (직접 입력)",
 ] as const;
 
