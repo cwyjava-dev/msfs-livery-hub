@@ -3,11 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { useRoute, Link } from "wouter";
+import { useRoute, Link, useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
-import { Download, AlertCircle, User, Calendar, Image as ImageIcon, Loader2 } from "lucide-react";
+import { Download, AlertCircle, User, Calendar, Image as ImageIcon, Loader2, Edit2, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useAuth } from "@/_core/hooks/useAuth";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export default function LiveryDetail() {
   const [, params] = useRoute("/livery/:id");
@@ -24,7 +34,20 @@ export default function LiveryDetail() {
     },
   });
 
+  const deleteMutation = trpc.livery.delete.useMutation({
+    onSuccess: () => {
+      toast.success("리버리가 삭제되었습니다.");
+      navigate("/liveries");
+    },
+    onError: (error) => {
+      toast.error(error.message || "삭제 중 오류가 발생했습니다.");
+    },
+  });
+
   const [selectedImage, setSelectedImage] = useState<number>(0);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [, navigate] = useLocation();
+  const { user } = useAuth();
 
   const handleDownload = () => {
     if (!livery) return;
@@ -220,6 +243,32 @@ export default function LiveryDetail() {
               </CardContent>
             </Card>
 
+            {/* Edit/Delete Card - Only for owner */}
+            {user && livery.uploader?.id === user.id && (
+              <Card className="border-blue-200 bg-blue-50">
+                <CardHeader>
+                  <CardTitle className="text-base text-blue-900">내 리버리</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link href={`/livery/${livery.id}/edit`}>
+                      <Edit2 className="mr-2 h-4 w-4" />
+                      편집하기
+                    </Link>
+                  </Button>
+                  <Button
+                    variant="destructive"
+                    className="w-full"
+                    onClick={() => setShowDeleteDialog(true)}
+                    disabled={deleteMutation.isPending}
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    삭제하기
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Report Card */}
             <Card>
               <CardHeader>
@@ -264,6 +313,37 @@ export default function LiveryDetail() {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>리버리 삭제</AlertDialogTitle>
+            <AlertDialogDescription>
+              정말로 이 리버리를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <div className="flex gap-3">
+            <AlertDialogCancel>취소</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                deleteMutation.mutate({ id: liveryId });
+                setShowDeleteDialog(false);
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleteMutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  삭제 중...
+                </>
+              ) : (
+                "삭제"
+              )}
+            </AlertDialogAction>
+          </div>
+        </AlertDialogContent>
+      </AlertDialog>
     </Layout>
   );
 }

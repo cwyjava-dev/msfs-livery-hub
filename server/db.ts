@@ -205,6 +205,25 @@ export async function createContact(contact: InsertContact) {
   return result;
 }
 
+export async function updateLivery(id: number, updates: Partial<InsertLivery>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .update(liveries)
+    .set(updates)
+    .where(eq(liveries.id, id));
+}
+
+export async function deleteLivery(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .delete(liveries)
+    .where(eq(liveries.id, id));
+}
+
 export async function getContacts(limit?: number) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");

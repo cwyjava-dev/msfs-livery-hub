@@ -10,6 +10,8 @@ import {
   incrementDownloadCount,
   getUserLiveries,
   createContact,
+  updateLivery,
+  deleteLivery,
 } from "./db";
 import { isBrandAllowed } from "../shared/aircraft";
 import { TRPCError } from "@trpc/server";
@@ -138,6 +140,68 @@ export const appRouter = router({
         screenshots: livery.screenshots ? JSON.parse(livery.screenshots) : [],
       }));
     }),
+
+    // Update livery (protected - owner only)
+    update: protectedProcedure
+      .input(
+        z.object({
+          id: z.number(),
+          liveryName: z.string().min(1).max(256).optional(),
+          description: z.string().optional(),
+          msfsVersion: z.enum(["2020", "2024", "Both"]).optional(),
+          installMethod: z.string().optional(),
+          screenshots: z.array(z.string()).max(4).optional(),
+        })
+      )
+      .mutation(async ({ ctx, input }) => {
+        const livery = await getLiveryById(input.id);
+        if (!livery) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "리버리를 찾을 수 없습니다.",
+          });
+        }
+
+        if (livery.livery.userId !== ctx.user.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "자신의 리버리만 편집할 수 있습니다.",
+          });
+        }
+
+        const updates: any = {};
+        if (input.liveryName !== undefined) updates.liveryName = input.liveryName;
+        if (input.description !== undefined) updates.description = input.description;
+        if (input.msfsVersion !== undefined) updates.msfsVersion = input.msfsVersion;
+        if (input.installMethod !== undefined) updates.installMethod = input.installMethod;
+        if (input.screenshots !== undefined) updates.screenshots = JSON.stringify(input.screenshots);
+
+        await updateLivery(input.id, updates);
+        return { success: true };
+      }),
+
+    // Delete livery (protected - owner only)
+    delete: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        const livery = await getLiveryById(input.id);
+        if (!livery) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "리버리를 찾을 수 없습니다.",
+          });
+        }
+
+        if (livery.livery.userId !== ctx.user.id) {
+          throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "자신의 리버리만 삭제할 수 있습니다.",
+          });
+        }
+
+        await deleteLivery(input.id);
+        return { success: true };
+      }),
   }),
 
   contact: router({
