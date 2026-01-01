@@ -30,22 +30,23 @@ export type InsertUser = typeof users.$inferInsert;
  */
 export const liveries = mysqlTable("liveries", {
   id: int("id").autoincrement().primaryKey(),
-  userId: int("userId").notNull(), // Foreign key to users table
+  userId: int("userId").notNull(),
   manufacturer: mysqlEnum("manufacturer", ["Airbus", "Boeing"]).notNull(),
-  aircraft: varchar("aircraft", { length: 64 }).notNull(), // e.g., "A320", "B737"
-  brand: varchar("brand", { length: 128 }).notNull(), // e.g., "FBW", "PMDG", or custom
+  aircraft: varchar("aircraft", { length: 64 }).notNull(),
+  brand: varchar("brand", { length: 128 }).notNull(),
   liveryName: varchar("liveryName", { length: 256 }).notNull(),
   description: text("description"),
   msfsVersion: mysqlEnum("msfsVersion", ["2020", "2024", "Both"]),
-  installMethod: text("installMethod"), // Installation instructions
-  // Screenshots stored as JSON array of S3 URLs
-  screenshots: text("screenshots"), // JSON string: ["url1", "url2", ...]
-  // Livery file stored in S3
+  installMethod: text("installMethod"),
+  screenshots: text("screenshots"),
   fileUrl: text("fileUrl").notNull(),
   fileKey: text("fileKey").notNull(),
   fileName: varchar("fileName", { length: 256 }),
-  fileSize: int("fileSize"), // in bytes
+  fileSize: int("fileSize"),
   downloadCount: int("downloadCount").default(0).notNull(),
+  status: mysqlEnum("status", ["pending", "approved", "rejected"]).default("pending").notNull(),
+  reviewedAt: timestamp("reviewedAt"),
+  reviewNotes: text("reviewNotes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
@@ -62,9 +63,8 @@ export const contacts = mysqlTable("contacts", {
   title: varchar("title", { length: 256 }).notNull(),
   content: text("content").notNull(),
   email: varchar("email", { length: 320 }).notNull(),
-  // Optional: related livery information (for reports)
   relatedLiveryId: int("relatedLiveryId"),
-  relatedLiveryInfo: text("relatedLiveryInfo"), // JSON string with livery details
+  relatedLiveryInfo: text("relatedLiveryInfo"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 

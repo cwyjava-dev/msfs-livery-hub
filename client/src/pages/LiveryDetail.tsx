@@ -147,8 +147,19 @@ export default function LiveryDetail() {
             <Card>
               <CardHeader>
                 <div className="flex items-start justify-between">
-                  <div className="space-y-2">
-                    <CardTitle className="text-2xl">{livery.liveryName}</CardTitle>
+                  <div className="space-y-2 flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <CardTitle className="text-2xl">{livery.liveryName}</CardTitle>
+                      {livery.status === "pending" && (
+                        <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-100">AI 검토 대기</Badge>
+                      )}
+                      {livery.status === "approved" && (
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">승인됨</Badge>
+                      )}
+                      {livery.status === "rejected" && (
+                        <Badge className="bg-red-100 text-red-800 hover:bg-red-100">거절됨</Badge>
+                      )}
+                    </div>
                     <CardDescription className="flex items-center gap-2 text-base">
                       <Badge variant="secondary">{livery.manufacturer}</Badge>
                       <Badge variant="secondary">{livery.aircraft}</Badge>
@@ -202,6 +213,16 @@ export default function LiveryDetail() {
                     <div>
                       <h3 className="font-semibold text-foreground mb-2">설치 방법</h3>
                       <p className="text-muted-foreground whitespace-pre-wrap">{livery.installMethod}</p>
+                    </div>
+                  </>
+                )}
+
+                {livery.status === "rejected" && livery.reviewNotes && (
+                  <>
+                    <Separator />
+                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                      <h3 className="font-semibold text-red-900 mb-2">거절 사유</h3>
+                      <p className="text-red-800 text-sm">{livery.reviewNotes}</p>
                     </div>
                   </>
                 )}

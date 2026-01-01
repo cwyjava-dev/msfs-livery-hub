@@ -52,7 +52,7 @@ export default function Upload() {
 
   const createMutation = trpc.livery.create.useMutation({
     onSuccess: (data) => {
-      toast.success("리버리가 성공적으로 업로드되었습니다!");
+      toast.success("리버리가 업로드되었습니다. AI 검토 대기 중...");
       setLocation(`/livery/${data.id}`);
     },
     onError: (error) => {
@@ -156,7 +156,7 @@ export default function Upload() {
       
       const { url: fileUrl, key: fileKey } = await fileResponse.json();
 
-      // Create livery record
+      // Create livery record with pending status
       await createMutation.mutateAsync({
         manufacturer,
         aircraft,
@@ -171,9 +171,25 @@ export default function Upload() {
         fileName: liveryFile.name,
         fileSize: liveryFile.size,
       });
+      
+      // Reset form
+      setManufacturer("");
+      setAircraft("");
+      setBrand("");
+      setCustomBrand("");
+      setLiveryName("");
+      setDescription("");
+      setMsfsVersion("");
+      setInstallMethod("");
+      setScreenshots([]);
+      setScreenshotPreviews([]);
+      setLiveryFile(null);
+      setAgreed(false);
     } catch (error) {
       console.error("Upload error:", error);
       toast.error("파일 업로드 중 오류가 발생했습니다.");
+      setUploading(false);
+    } finally {
       setUploading(false);
     }
   };
