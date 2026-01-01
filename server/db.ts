@@ -105,11 +105,17 @@ export async function getLiveries(filters?: {
   search?: string;
   limit?: number;
   offset?: number;
+  includeUnapproved?: boolean;
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
   const conditions = [];
+  
+  // Only show approved liveries by default
+  if (!filters?.includeUnapproved) {
+    conditions.push(eq(liveries.status, "approved"));
+  }
   
   if (filters?.manufacturer) {
     conditions.push(eq(liveries.manufacturer, filters.manufacturer as any));
@@ -155,9 +161,16 @@ export async function getLiveries(filters?: {
   return await query;
 }
 
-export async function getLiveryById(id: number) {
+export async function getLiveryById(id: number, includeUnapproved?: boolean) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
+
+  const conditions = [eq(liveries.id, id)];
+  
+  // Only show approved liveries by default (unless explicitly requested)
+  if (!includeUnapproved) {
+    conditions.push(eq(liveries.status, "approved"));
+  }
 
   const result = await db
     .select({
@@ -169,7 +182,7 @@ export async function getLiveryById(id: number) {
     })
     .from(liveries)
     .leftJoin(users, eq(liveries.userId, users.id))
-    .where(eq(liveries.id, id))
+    .where(and(...conditions))
     .limit(1);
 
   return result.length > 0 ? result[0] : null;

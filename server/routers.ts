@@ -12,9 +12,12 @@ import {
   createContact,
   updateLivery,
   deleteLivery,
+  getDb,
 } from "./db";
+import { liveries } from "../drizzle/schema";
 import { isBrandAllowed } from "../shared/aircraft";
 import { TRPCError } from "@trpc/server";
+import { desc, eq } from "drizzle-orm";
 
 export const appRouter = router({
   system: systemRouter,
@@ -108,8 +111,18 @@ export const appRouter = router({
     // Get single livery by ID (public)
     getById: publicProcedure
       .input(z.object({ id: z.number() }))
-      .query(async ({ input }) => {
-        const result = await getLiveryById(input.id);
+      .query(async ({ input, ctx }) => {
+        // Try to get approved livery first
+        let result = await getLiveryById(input.id, false);
+        
+        // If not found and user is authenticated, try to get unapproved livery if it's theirs
+        if (!result && ctx.user) {
+          const unapprovedResult = await getLiveryById(input.id, true);
+          if (unapprovedResult && unapprovedResult.livery.userId === ctx.user.id) {
+            result = unapprovedResult;
+          }
+        }
+        
         if (!result) {
           throw new TRPCError({
             code: "NOT_FOUND",
@@ -132,9 +145,17 @@ export const appRouter = router({
         return { success: true };
       }),
 
-    // Get user's own liveries (protected)
+    // Get user's own liveries (protected) - show all statuses
     myLiveries: protectedProcedure.query(async ({ ctx }) => {
-      const results = await getUserLiveries(ctx.user.id);
+      const db = await getDb();
+      if (!db) throw new Error("Database not available");
+      
+      const results = await db
+        .select()
+        .from(liveries)
+        .where(eq(liveries.userId, ctx.user.id))
+        .orderBy(desc(liveries.createdAt));
+      
       return results.map((livery) => ({
         ...livery,
         screenshots: livery.screenshots ? JSON.parse(livery.screenshots) : [],
