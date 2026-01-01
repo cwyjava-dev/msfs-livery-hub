@@ -36,7 +36,7 @@ export default function Layout({ children }: LayoutProps) {
             <Link href="/">
               <div className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
                 <Plane className="h-6 w-6 text-primary" />
-                <span className="text-xl font-bold text-foreground">MSFS Livery Hub</span>
+                <span className="text-xl font-bold text-foreground">Flight Livery Hub.kr</span>
                 <span className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-md">BETA</span>
               </div>
             </Link>
