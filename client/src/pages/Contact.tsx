@@ -95,9 +95,16 @@ export default function Contact() {
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-2">문의 / 신고</h1>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground mb-4">
               버그, 오류, 저작권 문제, 개선 제안 등을 보내주세요.
             </p>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <p className="text-sm text-blue-900">
+                <span className="font-semibold">Flight Livery Hub 지원센터</span>
+                <br />
+                아래 양식을 작성하고 제출하면 <span className="font-semibold">beulpailo@gmail.com</span>으로 메일이 전송됩니다.
+              </p>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit}>
@@ -108,7 +115,7 @@ export default function Contact() {
                   문의 정보
                 </CardTitle>
                 <CardDescription>
-                  모든 항목은 필수입니다. 답변은 입력하신 이메일로 보내드립니다.
+                  모든 항목은 필수입니다. 입력하신 내용은 Flight Livery Hub 지원센터(beulpailo@gmail.com)로 전송되며, 입력하신 이메일로 답변을 보내드립니다.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
