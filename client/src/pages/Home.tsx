@@ -14,15 +14,15 @@ export default function Home() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-primary/5 to-background py-16 md:py-24">
+      <section className="bg-gradient-to-b from-orange-100 via-pink-100 to-purple-100 py-16 md:py-24">
         <div className="container mx-auto text-center">
           <div className="flex justify-center mb-6">
-            <Plane className="h-16 w-16 text-primary" />
+            <Plane className="h-16 w-16 text-orange-600" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
             MSFS Livery Hub
           </h1>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
             Microsoft Flight Simulator 리버리를 공유하고 다운로드하는 커뮤니티 플랫폼
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
