@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { and, desc, eq, like, or, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, liveries, InsertLivery, contacts, InsertContact, Livery } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,131 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// Livery queries
+export async function createLivery(livery: InsertLivery) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.insert(liveries).values(livery);
+  return result;
+}
+
+export async function getLiveries(filters?: {
+  manufacturer?: string;
+  aircraft?: string;
+  brand?: string;
+  search?: string;
+  limit?: number;
+  offset?: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const conditions = [];
+  
+  if (filters?.manufacturer) {
+    conditions.push(eq(liveries.manufacturer, filters.manufacturer as any));
+  }
+  if (filters?.aircraft) {
+    conditions.push(eq(liveries.aircraft, filters.aircraft));
+  }
+  if (filters?.brand) {
+    conditions.push(eq(liveries.brand, filters.brand));
+  }
+  if (filters?.search) {
+    conditions.push(
+      or(
+        like(liveries.liveryName, `%${filters.search}%`),
+        like(liveries.description, `%${filters.search}%`)
+      )
+    );
+  }
+
+  let query = db
+    .select({
+      livery: liveries,
+      user: {
+        id: users.id,
+        name: users.name,
+      },
+    })
+    .from(liveries)
+    .leftJoin(users, eq(liveries.userId, users.id))
+    .orderBy(desc(liveries.createdAt));
+
+  if (conditions.length > 0) {
+    query = query.where(and(...conditions)) as any;
+  }
+
+  if (filters?.limit) {
+    query = query.limit(filters.limit) as any;
+  }
+  if (filters?.offset) {
+    query = query.offset(filters.offset) as any;
+  }
+
+  return await query;
+}
+
+export async function getLiveryById(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db
+    .select({
+      livery: liveries,
+      user: {
+        id: users.id,
+        name: users.name,
+      },
+    })
+    .from(liveries)
+    .leftJoin(users, eq(liveries.userId, users.id))
+    .where(eq(liveries.id, id))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
+export async function incrementDownloadCount(id: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  await db
+    .update(liveries)
+    .set({ downloadCount: sql`${liveries.downloadCount} + 1` })
+    .where(eq(liveries.id, id));
+}
+
+export async function getUserLiveries(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db
+    .select()
+    .from(liveries)
+    .where(eq(liveries.userId, userId))
+    .orderBy(desc(liveries.createdAt));
+}
+
+// Contact queries
+export async function createContact(contact: InsertContact) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db.insert(contacts).values(contact);
+  return result;
+}
+
+export async function getContacts(limit?: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  let query = db.select().from(contacts).orderBy(desc(contacts.createdAt));
+  
+  if (limit) {
+    query = query.limit(limit) as any;
+  }
+
+  return await query;
+}
