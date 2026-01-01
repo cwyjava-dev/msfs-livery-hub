@@ -34,7 +34,7 @@ export default function Home() {
     <Layout>
       {/* Hero Section with Dynamic Background */}
       <section
-        className="relative py-16 md:py-24 overflow-hidden"
+        className="relative py-40 md:py-56 overflow-hidden"
         style={{
           backgroundImage: `url(${BACKGROUND_IMAGES[currentImageIndex]})`,
           backgroundSize: "cover",
@@ -44,27 +44,27 @@ export default function Home() {
         }}
       >
         {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="container mx-auto text-center relative z-10">
-          <div className="flex justify-center mb-6">
-            <Plane className="h-16 w-16 text-white drop-shadow-lg" />
+        <div className="absolute inset-0 bg-black/45" />
+        <div className="container mx-auto text-center relative z-10 px-4">
+          <div className="flex justify-center mb-8">
+            <Plane className="h-24 w-24 text-white drop-shadow-lg" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+          <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg leading-tight">
             MSFS Livery Hub
           </h1>
-          <p className="text-xl text-white mb-8 max-w-2xl mx-auto drop-shadow-lg">
+          <p className="text-2xl md:text-3xl text-white mb-12 max-w-3xl mx-auto drop-shadow-lg font-light">
             Microsoft Flight Simulator 리버리를 공유하고 다운로드하는 커뮤니티 플랫폼
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+            <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700 h-14 px-8 text-lg">
               <Link href="/liveries">
-                <Search className="mr-2 h-5 w-5" />
+                <Search className="mr-3 h-6 w-6" />
                 리버리 둘러보기
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="bg-white/90 hover:bg-white text-gray-800">
+            <Button size="lg" variant="outline" asChild className="bg-white/95 hover:bg-white text-gray-800 h-14 px-8 text-lg border-2">
               <Link href="/upload">
-                <Upload className="mr-2 h-5 w-5" />
+                <Upload className="mr-3 h-6 w-6" />
                 리버리 업로드
               </Link>
             </Button>
@@ -73,12 +73,12 @@ export default function Home() {
       </section>
 
       {/* Image indicator dots */}
-      <div className="flex justify-center gap-2 py-4 bg-gray-100">
+      <div className="flex justify-center gap-3 py-6 bg-white">
         {BACKGROUND_IMAGES.map((_, index) => (
           <button
             key={index}
-            className={`h-2 w-2 rounded-full transition-all ${
-              index === currentImageIndex ? "bg-blue-600 w-8" : "bg-gray-400"
+            className={`h-3 w-3 rounded-full transition-all ${
+              index === currentImageIndex ? "bg-blue-600 w-10" : "bg-gray-300 hover:bg-gray-400"
             }`}
             onClick={() => setCurrentImageIndex(index)}
             aria-label={`배경 이미지 ${index + 1}`}
@@ -87,110 +87,117 @@ export default function Home() {
       </div>
 
       {/* Beta Notice */}
-      <section className="container mx-auto py-8">
-        <Alert>
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>베타 서비스 안내</AlertTitle>
-          <AlertDescription>
-            현재 베타 버전에서는 Airbus와 Boeing 항공기 리버리를 지원합니다. Boeing은 현대 민항 기체만 허용(B707,
-            B720, B727 제외)되며, Airbus A340, A350은 iniBuilds 브랜드만 지원됩니다. 업로드 시 기종과 애드온
-            브랜드를 정확히 선택해 주세요. 본 사이트는 사용자 제작 리버리 공유 플랫폼이며, 일부 자료는 검수 없이
-            공개됩니다. 문의 및 신고는 Contact 메뉴를 이용해 주세요.
-          </AlertDescription>
-        </Alert>
+      <section className="bg-blue-50 py-8">
+        <div className="container mx-auto px-4">
+          <div className="flex gap-4 items-start">
+            <AlertCircle className="h-6 w-6 text-blue-600 flex-shrink-0 mt-1" />
+            <div>
+              <h3 className="text-lg font-semibold text-blue-900 mb-2">베타 서비스 안내</h3>
+              <p className="text-blue-800 text-base leading-relaxed">
+                현재 베타 버전에서는 Airbus와 Boeing 항공기 리버리를 지원합니다. Boeing은 현대 민항 기체만 허용(B707, B720, B727 제외)되며, Airbus A340, A350은 iniBuilds 브랜드만 지원됩니다. 업로드 시 기종과 애드온 브랜드를 정확히 선택해 주세요.
+              </p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Installation Guide */}
-      <section className="container mx-auto py-12">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-2xl font-bold text-foreground mb-6">설치 방법 안내</h2>
-          <Card>
-            <CardHeader>
-              <CardTitle>Community 폴더에 설치하기</CardTitle>
-              <CardDescription>다운로드한 리버리를 올바르게 설치하는 방법</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">1단계: Community 폴더 위치 확인</h3>
-                <p className="text-muted-foreground">
-                  Windows: C:\Users\[사용자명]\AppData\Local\Packages\Microsoft.FlightSimulator_[ID]\LocalCache\Packages\Community
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-5xl font-bold text-gray-900 mb-12 text-center">설치 방법 안내</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="bg-gray-50 p-8 rounded-lg">
+                <div className="flex items-center mb-4">
+                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-blue-600 text-white text-lg font-bold">1</div>
+                  <h3 className="ml-4 text-2xl font-semibold text-gray-900">Community 폴더 위치</h3>
+                </div>
+                <p className="text-gray-700 text-lg">
+                  C:\Users\[사용자명]\AppData\Local\Packages\Microsoft.FlightSimulator_[ID]\LocalCache\Packages\Community
                 </p>
               </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">2단계: 리버리 파일 추출</h3>
-                <p className="text-muted-foreground">
+              <div className="bg-gray-50 p-8 rounded-lg">
+                <div className="flex items-center mb-4">
+                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-blue-600 text-white text-lg font-bold">2</div>
+                  <h3 className="ml-4 text-2xl font-semibold text-gray-900">리버리 파일 추출</h3>
+                </div>
+                <p className="text-gray-700 text-lg">
                   다운로드한 ZIP 파일을 압축 해제하여 폴더를 얻습니다.
                 </p>
               </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">3단계: Community 폴더에 복사</h3>
-                <p className="text-muted-foreground">
+              <div className="bg-gray-50 p-8 rounded-lg">
+                <div className="flex items-center mb-4">
+                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-blue-600 text-white text-lg font-bold">3</div>
+                  <h3 className="ml-4 text-2xl font-semibold text-gray-900">Community 폴더에 복사</h3>
+                </div>
+                <p className="text-gray-700 text-lg">
                   압축 해제된 폴더를 Community 폴더에 복사합니다.
                 </p>
               </div>
-              <div>
-                <h3 className="font-semibold text-foreground mb-2">4단계: 게임 재시작</h3>
-                <p className="text-muted-foreground">
+              <div className="bg-gray-50 p-8 rounded-lg">
+                <div className="flex items-center mb-4">
+                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-blue-600 text-white text-lg font-bold">4</div>
+                  <h3 className="ml-4 text-2xl font-semibold text-gray-900">게임 재시작</h3>
+                </div>
+                <p className="text-gray-700 text-lg">
                   Microsoft Flight Simulator를 재시작하면 리버리가 적용됩니다.
                 </p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Recent Liveries */}
-      <section className="container mx-auto py-12">
-        <h2 className="text-2xl font-bold text-foreground mb-6">최신 리버리</h2>
-        {isLoading ? (
-          <div className="flex justify-center py-8">
-            <p className="text-muted-foreground">로딩 중...</p>
-          </div>
-        ) : recentLiveries && recentLiveries.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recentLiveries.map((livery) => (
-              <Link key={livery.id} href={`/livery/${livery.id}`}>
-                <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
-                  {livery.screenshots && livery.screenshots.length > 0 && (
-                    <div className="relative h-48 overflow-hidden bg-gray-200">
-                      <img
-                        src={livery.screenshots[0]}
-                        alt={livery.liveryName}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  )}
-                  <CardHeader>
-                    <CardTitle className="text-lg">{livery.liveryName}</CardTitle>
-                    <CardDescription>
-                      {livery.manufacturer} {livery.aircraft}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        <strong>브랜드:</strong> {livery.brand}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-5xl font-bold text-gray-900 mb-16 text-center">최신 리버리</h2>
+          {isLoading ? (
+            <div className="flex justify-center py-16">
+              <p className="text-gray-600 text-xl">로딩 중...</p>
+            </div>
+          ) : recentLiveries && recentLiveries.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {recentLiveries.map((livery) => (
+                <Link key={livery.id} href={`/livery/${livery.id}`}>
+                  <div className="bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer h-full">
+                    {livery.screenshots && livery.screenshots.length > 0 && (
+                      <div className="relative h-56 overflow-hidden bg-gray-200">
+                        <img
+                          src={livery.screenshots[0]}
+                          alt={livery.liveryName}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{livery.liveryName}</h3>
+                      <p className="text-gray-600 text-lg mb-4">
+                        {livery.manufacturer} {livery.aircraft}
                       </p>
-                      <p className="text-sm text-muted-foreground">
-                        <strong>다운로드:</strong> {livery.downloadCount || 0}
-                      </p>
+                      <div className="space-y-2">
+                        <p className="text-base text-gray-700">
+                          <strong>브랜드:</strong> {livery.brand}
+                        </p>
+                        <p className="text-base text-gray-700">
+                          <strong>다운로드:</strong> {livery.downloadCount || 0}
+                        </p>
+                      </div>
                     </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <Card>
-            <CardContent className="py-8 text-center">
-              <ImageIcon className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <p className="text-muted-foreground">아직 업로드된 리버리가 없습니다.</p>
-              <Button asChild className="mt-4">
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="bg-white rounded-lg p-16 text-center">
+              <ImageIcon className="h-20 w-20 text-gray-400 mx-auto mb-6" />
+              <p className="text-gray-600 text-2xl mb-8">아직 업로드된 리버리가 없습니다.</p>
+              <Button asChild className="bg-blue-600 hover:bg-blue-700 h-14 px-8 text-lg">
                 <Link href="/upload">첫 번째 리버리 업로드하기</Link>
               </Button>
-            </CardContent>
-          </Card>
-        )}
+            </div>
+          )}
+        </div>
       </section>
     </Layout>
   );
