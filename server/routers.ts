@@ -18,19 +18,11 @@ import { liveries } from "../drizzle/schema";
 import { isBrandAllowed } from "../shared/aircraft";
 import { TRPCError } from "@trpc/server";
 import { desc, eq } from "drizzle-orm";
+import { authRouter } from "./authRouter";
 
 export const appRouter = router({
   system: systemRouter,
-  auth: router({
-    me: publicProcedure.query(opts => opts.ctx.user),
-    logout: publicProcedure.mutation(({ ctx }) => {
-      const cookieOptions = getSessionCookieOptions(ctx.req);
-      ctx.res.clearCookie(COOKIE_NAME, { ...cookieOptions, maxAge: -1 });
-      return {
-        success: true,
-      } as const;
-    }),
-  }),
+  auth: authRouter,
 
   livery: router({
     // Create a new livery (protected)

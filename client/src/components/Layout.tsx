@@ -1,7 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
 import { Plane, Upload, List, Mail, User } from "lucide-react";
 import {
   DropdownMenu,
@@ -89,9 +88,18 @@ export default function Layout({ children }: LayoutProps) {
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
-                <Button size="sm" asChild>
-                  <a href={getLoginUrl()}>로그인</a>
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Link href="/login">
+                    <Button size="sm" variant="outline">
+                      로그인
+                    </Button>
+                  </Link>
+                  <Link href="/register">
+                    <Button size="sm">
+                      회원가입
+                    </Button>
+                  </Link>
+                </div>
               )}
             </div>
           </div>

@@ -8,11 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { Upload as UploadIcon, X, Image as ImageIcon, Loader2, AlertCircle } from "lucide-react";
 import {
   MANUFACTURERS,
@@ -217,9 +216,9 @@ export default function Upload() {
               <CardDescription>리버리를 업로드하려면 로그인해주세요.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button asChild className="w-full">
-                <a href={getLoginUrl()}>로그인</a>
-              </Button>
+              <Link href="/login">
+                <Button className="w-full">로그인</Button>
+              </Link>
             </CardContent>
           </Card>
         </div>

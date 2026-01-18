@@ -2,7 +2,6 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/_core/hooks/useAuth";
-import { getLoginUrl } from "@/const";
 import { trpc } from "@/lib/trpc";
 import { Link } from "wouter";
 import { Download, Image as ImageIcon, Loader2, Upload } from "lucide-react";
@@ -33,9 +32,9 @@ export default function MyLiveries() {
               <CardDescription>내 리버리를 보려면 로그인해주세요.</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button asChild className="w-full">
-                <a href={getLoginUrl()}>로그인</a>
-              </Button>
+              <Link href="/login">
+                <Button className="w-full">로그인</Button>
+              </Link>
             </CardContent>
           </Card>
         </div>
