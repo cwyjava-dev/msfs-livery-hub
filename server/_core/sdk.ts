@@ -260,6 +260,24 @@ class SDKServer {
     // Regular authentication flow
     const cookies = this.parseCookies(req.headers.cookie);
     const sessionCookie = cookies.get(COOKIE_NAME);
+    
+    // Try local JWT authentication first
+    if (sessionCookie) {
+      try {
+        const { verifyToken } = await import("../auth");
+        const decoded = verifyToken(sessionCookie);
+        if (decoded && decoded.userId) {
+          const user = await db.getUserById(decoded.userId);
+          if (user) {
+            return user;
+          }
+        }
+      } catch (error) {
+        console.debug("[Auth] Local JWT verification failed, trying OAuth:", String(error));
+      }
+    }
+    
+    // Fall back to OAuth authentication
     const session = await this.verifySession(sessionCookie);
 
     if (!session) {
