@@ -56,7 +56,7 @@ export default function Home() {
             Microsoft Flight Simulator 리버리를 공유하고 다운로드하는 커뮤니티 플랫폼
           </p>
           <p className="text-xs md:text-sm text-white/70 mb-8 drop-shadow-lg">
-            이 사이트는 프랑스 파리의 서버를 기반으로 하며 사이트 국가는 대한민국을 기반으로 합니다.
+            이 사이트 국가는 대한민국을 기반으로 합니다.
           </p>
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700 h-14 px-8 text-lg">
