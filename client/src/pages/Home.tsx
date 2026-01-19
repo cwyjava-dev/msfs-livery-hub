@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Link } from "wouter";
 import { trpc } from "@/lib/trpc";
-import { Plane, Upload, Search, AlertCircle, Download, Image as ImageIcon } from "lucide-react";
+import { Plane, Upload, Search, AlertCircle, Download, Image as ImageIcon, Zap, Users, Globe } from "lucide-react";
 import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 
@@ -21,20 +21,19 @@ export default function Home() {
     limit: 6,
   });
 
-  // Change background image every 60 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
-    }, 60000); // 60 seconds
+    }, 60000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
     <Layout>
-      {/* Hero Section with Dynamic Background */}
+      {/* Hero Section - Modern Gradient Overlay */}
       <section
-        className="relative py-40 md:py-56 overflow-hidden"
+        className="relative py-48 md:py-64 overflow-hidden"
         style={{
           backgroundImage: `url(${BACKGROUND_IMAGES[currentImageIndex]})`,
           backgroundSize: "cover",
@@ -43,45 +42,66 @@ export default function Home() {
           transition: "background-image 1s ease-in-out",
         }}
       >
-        {/* Dark overlay for text readability */}
-        <div className="absolute inset-0 bg-black/45" />
+        {/* Modern gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/40" />
+        
+        {/* Animated background elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse" />
+          <div className="absolute top-40 right-10 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl animate-pulse animation-delay-2000" />
+        </div>
+
         <div className="container mx-auto text-center relative z-10 px-4">
+          {/* Icon with glow effect */}
           <div className="flex justify-center mb-8">
-            <Plane className="h-24 w-24 text-white drop-shadow-lg" />
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full blur-2xl opacity-50" />
+              <Plane className="h-28 w-28 text-white drop-shadow-2xl relative z-10" />
+            </div>
           </div>
-          <h1 className="text-6xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg leading-tight">
+
+          {/* Main heading with gradient text effect */}
+          <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 drop-shadow-2xl leading-tight tracking-tight">
             Flight Livery Hub
           </h1>
-          <p className="text-2xl md:text-3xl text-white mb-12 max-w-3xl mx-auto drop-shadow-lg font-light">
-            Microsoft Flight Simulator 리버리를 공유하고 다운로드하는 커뮤니티 플랫폼
+
+          {/* Subtitle */}
+          <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-3xl mx-auto drop-shadow-lg font-light">
+            Microsoft Flight Simulator 리버리를 공유하고 다운로드하는 현대적 커뮤니티 플랫폼
           </p>
-          <p className="text-xs md:text-sm text-white/70 mb-8 drop-shadow-lg">
-            이 사이트는 프랑스 파리의 서버를 기반으로 하며 사이트 국가는 대한민국을 기반으로 합니다.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button size="lg" asChild className="bg-blue-600 hover:bg-blue-700 h-14 px-8 text-lg">
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" asChild className="h-14 px-10 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-xl hover:shadow-2xl">
               <Link href="/liveries">
                 <Search className="mr-3 h-6 w-6" />
                 리버리 둘러보기
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="bg-white/95 hover:bg-white text-gray-800 h-14 px-8 text-lg border-2">
+            <Button size="lg" variant="outline" asChild className="h-14 px-10 text-lg font-semibold bg-white/20 hover:bg-white/30 text-white border-white/40 backdrop-blur-md">
               <Link href="/upload">
                 <Upload className="mr-3 h-6 w-6" />
                 리버리 업로드
               </Link>
             </Button>
           </div>
+
+          {/* Info text */}
+          <p className="text-sm md:text-base text-white/70 mt-12 drop-shadow-lg">
+            🌍 글로벌 커뮤니티 • 🔒 안전한 플랫폼 • ⚡ 빠른 다운로드
+          </p>
         </div>
       </section>
 
       {/* Image indicator dots */}
-      <div className="flex justify-center gap-3 py-6 bg-white">
+      <div className="flex justify-center gap-3 py-8 bg-gradient-to-b from-white to-gray-50">
         {BACKGROUND_IMAGES.map((_, index) => (
           <button
             key={index}
-            className={`h-3 w-3 rounded-full transition-all ${
-              index === currentImageIndex ? "bg-blue-600 w-10" : "bg-gray-300 hover:bg-gray-400"
+            className={`h-3 transition-all duration-300 rounded-full ${
+              index === currentImageIndex 
+                ? "bg-gradient-to-r from-blue-600 to-purple-600 w-10" 
+                : "bg-gray-300 hover:bg-gray-400 w-3"
             }`}
             onClick={() => setCurrentImageIndex(index)}
             aria-label={`배경 이미지 ${index + 1}`}
@@ -89,102 +109,159 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Beta Notice */}
-      <section className="bg-blue-50 py-8">
+      {/* Beta Notice - Modern Card Style */}
+      <section className="py-8 bg-gradient-to-r from-blue-50 to-purple-50">
         <div className="container mx-auto px-4">
-          <div className="flex gap-4 items-start">
-            <AlertCircle className="h-6 w-6 text-blue-600 flex-shrink-0 mt-1" />
-            <div>
-              <h3 className="text-lg font-semibold text-blue-900 mb-2">베타 서비스 안내</h3>
-              <p className="text-blue-800 text-base leading-relaxed">
-                현재 베타 버전에서는 Airbus와 Boeing 항공기 리버리를 지원합니다. Boeing은 현대 민항 기체만 허용(B707, B720, B727 제외)되며, Airbus A340, A350은 iniBuilds 브랜드만 지원됩니다. 업로드 시 기종과 애드온 브랜드를 정확히 선택해 주세요.
-              </p>
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+            <div className="flex gap-4 items-start">
+              <div className="flex-shrink-0 mt-1">
+                <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600">
+                  <AlertCircle className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-bold text-gray-900 mb-2">베타 서비스 안내</h3>
+                <p className="text-gray-700 text-base leading-relaxed">
+                  현재 베타 버전에서는 Airbus와 Boeing 항공기 리버리를 지원합니다. Boeing은 현대 민항 기체만 허용(B707, B720, B727 제외)되며, Airbus A340, A350은 iniBuilds 브랜드만 지원됩니다. 업로드 시 기종과 애드온 브랜드를 정확히 선택해 주세요.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Installation Guide */}
+      {/* Features Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-5xl font-bold text-gray-900 mb-12 text-center">설치 방법 안내</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="bg-gray-50 p-8 rounded-lg">
-                <div className="flex items-center mb-4">
-                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-blue-600 text-white text-lg font-bold">1</div>
-                  <h3 className="ml-4 text-2xl font-semibold text-gray-900">Community 폴더 위치</h3>
+          <h2 className="text-4xl md:text-5xl font-bold text-center text-gray-900 mb-16">왜 Flight Livery Hub를 선택할까요?</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Zap,
+                title: "빠른 다운로드",
+                description: "최적화된 서버로 리버리를 빠르게 다운로드하세요"
+              },
+              {
+                icon: Users,
+                title: "활발한 커뮤니티",
+                description: "전 세계 비행 시뮬레이터 팬들과 연결하세요"
+              },
+              {
+                icon: Globe,
+                title: "다양한 리버리",
+                description: "수천 개의 고품질 리버리를 탐색하세요"
+              }
+            ].map((feature, idx) => {
+              const Icon = feature.icon;
+              return (
+                <div key={idx} className="group p-8 rounded-2xl bg-gradient-to-br from-gray-50 to-gray-100 hover:from-blue-50 hover:to-purple-50 transition-all duration-300 border border-gray-200 hover:border-blue-200 hover:shadow-lg">
+                  <div className="flex items-center justify-center h-14 w-14 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <Icon className="h-7 w-7" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
+                  <p className="text-gray-700">{feature.description}</p>
                 </div>
-                <p className="text-gray-700 text-lg">
-                  C:\Users\[사용자명]\AppData\Local\Packages\Microsoft.FlightSimulator_[ID]\LocalCache\Packages\Community
-                </p>
-              </div>
-              <div className="bg-gray-50 p-8 rounded-lg">
-                <div className="flex items-center mb-4">
-                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-blue-600 text-white text-lg font-bold">2</div>
-                  <h3 className="ml-4 text-2xl font-semibold text-gray-900">리버리 파일 추출</h3>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Installation Guide - Modern Grid */}
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-5xl mx-auto">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-16 text-center">설치 방법 안내</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                {
+                  step: 1,
+                  title: "Community 폴더 위치",
+                  description: "C:\\Users\\[사용자명]\\AppData\\Local\\Packages\\Microsoft.FlightSimulator_[ID]\\LocalCache\\Packages\\Community"
+                },
+                {
+                  step: 2,
+                  title: "리버리 파일 추출",
+                  description: "다운로드한 ZIP 파일을 압축 해제하여 폴더를 얻습니다."
+                },
+                {
+                  step: 3,
+                  title: "Community 폴더에 복사",
+                  description: "압축 해제된 폴더를 Community 폴더에 복사합니다."
+                },
+                {
+                  step: 4,
+                  title: "게임 재시작",
+                  description: "Microsoft Flight Simulator를 재시작하면 리버리가 적용됩니다."
+                }
+              ].map((item, idx) => (
+                <div key={idx} className="group p-8 rounded-2xl bg-white border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-start gap-4">
+                    <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg group-hover:scale-110 transition-transform duration-300">
+                      {item.step}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
+                      <p className="text-gray-700 text-sm leading-relaxed">{item.description}</p>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-gray-700 text-lg">
-                  다운로드한 ZIP 파일을 압축 해제하여 폴더를 얻습니다.
-                </p>
-              </div>
-              <div className="bg-gray-50 p-8 rounded-lg">
-                <div className="flex items-center mb-4">
-                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-blue-600 text-white text-lg font-bold">3</div>
-                  <h3 className="ml-4 text-2xl font-semibold text-gray-900">Community 폴더에 복사</h3>
-                </div>
-                <p className="text-gray-700 text-lg">
-                  압축 해제된 폴더를 Community 폴더에 복사합니다.
-                </p>
-              </div>
-              <div className="bg-gray-50 p-8 rounded-lg">
-                <div className="flex items-center mb-4">
-                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-lg bg-blue-600 text-white text-lg font-bold">4</div>
-                  <h3 className="ml-4 text-2xl font-semibold text-gray-900">게임 재시작</h3>
-                </div>
-                <p className="text-gray-700 text-lg">
-                  Microsoft Flight Simulator를 재시작하면 리버리가 적용됩니다.
-                </p>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Recent Liveries */}
-      <section className="py-20 bg-gray-50">
+      {/* Recent Liveries - Modern Grid */}
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-5xl font-bold text-gray-900 mb-16 text-center">최신 리버리</h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-center">최신 리버리</h2>
+          <p className="text-center text-gray-600 text-lg mb-16">커뮤니티에서 최근 업로드된 멋진 리버리들을 확인하세요</p>
+
           {isLoading ? (
-            <div className="flex justify-center py-16">
-              <p className="text-gray-600 text-xl">로딩 중...</p>
+            <div className="flex justify-center py-20">
+              <div className="animate-spin">
+                <div className="h-12 w-12 border-4 border-gray-300 border-t-blue-600 rounded-full" />
+              </div>
             </div>
           ) : recentLiveries && recentLiveries.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {recentLiveries.map((livery) => (
                 <Link key={livery.id} href={`/livery/${livery.id}`}>
-                  <div className="bg-white rounded-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer h-full">
+                  <div className="group h-full bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-blue-400 hover:shadow-2xl transition-all duration-300 cursor-pointer">
                     {livery.screenshots && livery.screenshots.length > 0 && (
-                      <div className="relative h-56 overflow-hidden bg-gray-200">
+                      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-200 to-gray-300">
                         <img
                           src={livery.screenshots[0]}
                           alt={livery.liveryName}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>
                     )}
                     <div className="p-6">
-                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{livery.liveryName}</h3>
-                      <p className="text-gray-600 text-lg mb-4">
+                      <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">{livery.liveryName}</h3>
+                      <p className="text-gray-600 text-sm mb-4">
                         {livery.manufacturer} {livery.aircraft}
                       </p>
-                      <div className="space-y-2">
-                        <p className="text-base text-gray-700">
-                          <strong>브랜드:</strong> {livery.brand}
-                        </p>
-                        <p className="text-base text-gray-700">
-                          <strong>다운로드:</strong> {livery.downloadCount || 0}
-                        </p>
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600">브랜드:</span>
+                          <span className="font-semibold text-gray-900">{livery.brand}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-gray-600 flex items-center gap-1">
+                            <Download className="h-4 w-4" /> 다운로드
+                          </span>
+                          <span className="font-semibold text-gray-900">{livery.downloadCount || 0}</span>
+                        </div>
+                      </div>
+                      <div className="pt-4 border-t border-gray-200">
+                        <button className="w-full py-2 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold text-sm hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+                          자세히 보기
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -192,14 +269,27 @@ export default function Home() {
               ))}
             </div>
           ) : (
-            <div className="bg-white rounded-lg p-16 text-center">
+            <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-16 text-center border-2 border-dashed border-gray-300">
               <ImageIcon className="h-20 w-20 text-gray-400 mx-auto mb-6" />
-              <p className="text-gray-600 text-2xl mb-8">아직 업로드된 리버리가 없습니다.</p>
-              <Button asChild className="bg-blue-600 hover:bg-blue-700 h-14 px-8 text-lg">
+              <p className="text-gray-600 text-xl mb-8 font-medium">아직 업로드된 리버리가 없습니다.</p>
+              <Button asChild className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 h-12 px-8 text-base font-semibold">
                 <Link href="/upload">첫 번째 리버리 업로드하기</Link>
               </Button>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">커뮤니티에 참여하세요</h2>
+          <p className="text-xl text-white/90 mb-12 max-w-2xl mx-auto">
+            당신의 멋진 리버리를 공유하고 다른 사람들의 창작물을 발견해보세요
+          </p>
+          <Button size="lg" asChild className="h-14 px-10 text-lg font-semibold bg-white text-blue-600 hover:bg-gray-100 shadow-xl hover:shadow-2xl">
+            <Link href="/upload">지금 시작하기</Link>
+          </Button>
         </div>
       </section>
     </Layout>
